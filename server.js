@@ -106,6 +106,31 @@ app.post('/recipes', jsonParser, (req, res) => {
   res.status(201).json(item);
 });
 
+app.put('/recipes/:id', jsonParser, (req, res) => {
+  const requiredFields = ["name", "ingredients"];
+  for (let i=0; i<requiredFields.length; i++) {
+    const field = requiredFields[i];
+    if (!(field in req.body)) {
+      const message = `Missing \`${field}\` in request body`
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  }
+  // I chose not to validate that the body ID matched the params ID
+  // or even that there IS a body ID at all,
+  // because I think there's no reason to make the user send a body ID.
+  // There's only one valid option here, so why not just put the
+  // updated recipe in the space from the first one, without
+  // requiring additional input from the user?
+  console.log(`Updating recipe \`${req.params.id}\``);
+  const updatedItem = Recipes.update({
+    id: req.params.id,
+    name: req.body.name,
+    ingredients: req.body.ingredients
+    });
+  res.status(204).json(updatedItem);
+});
+
 app.delete('/recipes/:id', (req, res) => {
   Recipes.delete(req.params.id);
   console.log(`Deleted recipe \`${req.params.ID}\``);
