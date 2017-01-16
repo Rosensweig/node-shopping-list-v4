@@ -123,12 +123,12 @@ app.put('/recipes/:id', jsonParser, (req, res) => {
   // updated recipe in the space from the first one, without
   // requiring additional input from the user?
   console.log(`Updating recipe \`${req.params.id}\``);
-  const updatedItem = Recipes.update({
+  const updatedRecipe = Recipes.update({
     id: req.params.id,
     name: req.body.name,
     ingredients: req.body.ingredients
     });
-  res.status(204).json(updatedItem);
+  res.status(204).json(updatedRecipe);
 });
 
 app.delete('/recipes/:id', (req, res) => {
